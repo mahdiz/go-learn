@@ -1,0 +1,7 @@
+*.o
+*.pyc
+*.swp
+*~
+Makefile
+*.log
+*.exe
