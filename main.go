@@ -5,6 +5,7 @@ import (
 	"os/user"
 	"runtime"
 	"time"
+	"encoding/binary"
 )
 
 func arrayExample() {
@@ -112,7 +113,7 @@ func fibonacci(c, quit chan int) {
 	for {
 		select {
 		case c <- x:
-			x, y = y, x+y
+			x, y = y, x + y
 		case <-quit:
 			fmt.Println("quit")
 			return
@@ -150,6 +151,46 @@ func timer() {
 	}
 }
 
+// Marshals a list of byte arrays
+// Each input array must have less than 65536 bytes (65KB)
+func MarshalArrays(arrs ...[]byte) []byte {
+	size := 0
+	for _, arr := range arrs {
+		size += len(arr) + 2
+	}
+
+	i := 0
+	res := make([]byte, size)
+	for _, arr := range arrs {
+		len := len(arr)
+		binary.BigEndian.PutUint16(res[i:i + 2], uint16(len))
+		copy(res[i + 2 : i + len + 2], arr)
+		i += len + 2
+	}
+	return res
+}
+
+// Unmarshals a list of byte arrays
+func UnmarshalArrays(input []byte) [][]byte {
+	var arrs [][]byte
+
+	for i := 0; i < len(input); {
+		len := int(binary.BigEndian.Uint16(input[i : i + 2]))
+		arr := make([]byte, len)
+		copy(arr, input[i + 2 : i + 2 + len])
+		arrs = append(arrs, arr)
+		i += len + 2
+	}
+	return arrs
+}
+
 func main() {
-	sliceExample()
+	a1 := []byte{1, 2, 3, 4}
+	a2 := []byte{4, 5}
+	a3 := []byte{6, 7, 8}
+	x := MarshalArrays(a1, a2, a3)
+	fmt.Println(x)
+
+	y := UnmarshalArrays(x)
+	fmt.Println(y)
 }
