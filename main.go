@@ -185,12 +185,5 @@ func UnmarshalArrays(input []byte) [][]byte {
 }
 
 func main() {
-	a1 := []byte{1, 2, 3, 4}
-	a2 := []byte{4, 5}
-	a3 := []byte{6, 7, 8}
-	x := MarshalArrays(a1, a2, a3)
-	fmt.Println(x)
-
-	y := UnmarshalArrays(x)
-	fmt.Println(y)
+	TestTypes()
 }
