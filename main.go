@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"time"
 	"encoding/binary"
+	"github.com/mahdiz/go-learn/animals"
 )
 
 func arrayExample() {
@@ -184,6 +185,11 @@ func UnmarshalArrays(input []byte) [][]byte {
 	return arrs
 }
 
+func TestExporting() {
+	dog := animals.Dog{BarkStrength: 10}
+	dog.Age = 1
+}
+
 func main() {
-	TestTypes()
+	TestExporting()
 }
