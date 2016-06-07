@@ -1,15 +1,51 @@
+// Basic Go types:
+// bool, byte, string
+// int, int8, int16, int32, int64
+// uint, uint8, uint16, uint32, uint64
+// float32, float64
+
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
+	"github.com/mahdiz/go-learn/animals"
 	"os/user"
 	"runtime"
 	"time"
-	"encoding/binary"
-	"github.com/mahdiz/go-learn/animals"
 )
 
+func basics() {
+
+	// Reading an integer from stdin:
+	var x int
+	fmt.Scanf("%v\n", &x)
+
+	// Reading an integer and a char right after it:
+	var c byte
+	fmt.Scanf("%v%c\n", &x, &c)
+	fmt.Println(string(c))
+
+	// Writing to stdout
+	fmt.Println("Test")
+	fmt.Print("Test\n")
+	fmt.Printf("%v %s", x, "Test")
+	fmt.Printf("%b", x) // Print base 2 of integer x
+
+	// Outputting decimal numbers
+	y := 87.567013
+	fmt.Printf("%.3f", y) // Prints 87.567
+	z := 7
+	fmt.Printf("%03d", z) // Prints 007
+
+	// Casting to another type
+	n := 26
+	s := float32(n)
+	fmt.Println(s)
+}
+
 func arrayExample() {
+
 	arr1 := [3]int{1, 2, 3}
 	arr2 := [...]int{4, 5, 6} // unknown size notation
 
@@ -20,6 +56,7 @@ func arrayExample() {
 }
 
 func sliceExample() {
+
 	arr := [5]int{1, 2, 3, 4, 5}
 	slc1 := arr[1:4]
 	slc2 := arr[3:]
@@ -34,6 +71,7 @@ func sliceExample() {
 
 // a map is a dictionary data structure
 func mapExample() {
+
 	// define the map
 	var myMap map[string]int
 
@@ -58,6 +96,7 @@ func mapExample() {
 }
 
 func funcHandler() {
+
 	type handler func(a []string)
 	var h handler
 	h = func(a []string) {
@@ -70,6 +109,7 @@ func funcHandler() {
 }
 
 func checkOS() {
+
 	if runtime.GOOS == "windows" {
 		usr, err := user.Current()
 		if err != nil {
@@ -81,12 +121,14 @@ func checkOS() {
 }
 
 func goroutine() {
+
 	go func() {
 		panic("Signal: ")
 	}()
 }
 
 func channels() {
+
 	a := []int{1, 2, 3, 4, 5, 6}
 
 	// create a channel of integers
@@ -110,11 +152,12 @@ func channels() {
 
 // waits for two channels and proceeds based on which channel has something to read
 func fibonacci(c, quit chan int) {
+
 	x, y := 0, 1
 	for {
 		select {
 		case c <- x:
-			x, y = y, x + y
+			x, y = y, x+y
 		case <-quit:
 			fmt.Println("quit")
 			return
@@ -124,6 +167,7 @@ func fibonacci(c, quit chan int) {
 
 // uses the above fibonacci function
 func channelsSelect() {
+
 	c := make(chan int)
 	quit := make(chan int)
 
@@ -138,6 +182,7 @@ func channelsSelect() {
 
 // timers use channels
 func timer() {
+
 	tick := time.Tick(1000 * time.Millisecond)
 	boom := time.After(5000 * time.Millisecond)
 
@@ -155,6 +200,7 @@ func timer() {
 // Marshals a list of byte arrays
 // Each input array must have less than 65536 bytes (65KB)
 func MarshalArrays(arrs ...[]byte) []byte {
+
 	size := 0
 	for _, arr := range arrs {
 		size += len(arr) + 2
@@ -164,8 +210,8 @@ func MarshalArrays(arrs ...[]byte) []byte {
 	res := make([]byte, size)
 	for _, arr := range arrs {
 		len := len(arr)
-		binary.BigEndian.PutUint16(res[i:i + 2], uint16(len))
-		copy(res[i + 2 : i + len + 2], arr)
+		binary.BigEndian.PutUint16(res[i:i+2], uint16(len))
+		copy(res[i+2:i+len+2], arr)
 		i += len + 2
 	}
 	return res
@@ -173,12 +219,13 @@ func MarshalArrays(arrs ...[]byte) []byte {
 
 // Unmarshals a list of byte arrays
 func UnmarshalArrays(input []byte) [][]byte {
+
 	var arrs [][]byte
 
 	for i := 0; i < len(input); {
-		len := int(binary.BigEndian.Uint16(input[i : i + 2]))
+		len := int(binary.BigEndian.Uint16(input[i : i+2]))
 		arr := make([]byte, len)
-		copy(arr, input[i + 2 : i + 2 + len])
+		copy(arr, input[i+2:i+2+len])
 		arrs = append(arrs, arr)
 		i += len + 2
 	}
@@ -186,11 +233,63 @@ func UnmarshalArrays(input []byte) [][]byte {
 }
 
 func TestExporting() {
+
 	dog := animals.Dog{BarkStrength: 10}
 	dog.Age = 1
 }
 
+type A struct {
+	Id int
+}
+
+type B struct {
+	A
+}
+
+type C struct {
+	B
+}
+
+func PrintNumber(n5 int, n3 int) {
+
+	for i := 0; i < n5; i++ {
+		fmt.Print("5")
+	}
+	for i := 0; i < n3; i++ {
+		fmt.Print("3")
+	}
+
+	fmt.Print(n5, n3, "\n")
+}
+
 func main() {
-	// branch test
-	TestExporting()
+
+	var T int
+	fmt.Scanf("%v", &T)
+
+	for i := 0; i < T; i++ {
+		var N int
+		fmt.Scanf("%v", &N)
+
+		if N%3 == 0 {
+			PrintNumber(N, 0)
+		} else if N/3 > 0 {
+			done := false
+			for j := N / 3; j > 0 && done == false; j-- {
+				if (N-j*3)%5 == 0 {
+					PrintNumber(j*3, N-j*3)
+					done = true
+				}
+			}
+			if done == false {
+				if N%5 == 0 {
+					PrintNumber(0, N)
+				} else {
+					fmt.Println(-1)
+				}
+			}
+		} else {
+			fmt.Println(-1)
+		}
+	}
 }
