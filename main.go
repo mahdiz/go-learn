@@ -9,9 +9,9 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/mahdiz/go-learn/animals"
+	"math"
+	"math/rand"
 	"os/user"
-	"runtime"
 	"time"
 )
 
@@ -42,6 +42,24 @@ func basics() {
 	n := 26
 	s := float32(n)
 	fmt.Println(s)
+
+	// Loop
+	for i := 0; i < 3; i++ {
+		fmt.Println(i)
+	}
+
+	// Random number generation
+	x = rand.Intn(1000) // A random number between [0,1000)
+	fmt.Println()
+}
+
+func mathExample() {
+
+	x := 7
+	y := 3
+	z := math.Ceil(float64(x) / float64(y))
+
+	fmt.Println(z)
 }
 
 func arrayExample() {
@@ -110,14 +128,12 @@ func funcHandler() {
 
 func checkOS() {
 
-	if runtime.GOOS == "windows" {
-		usr, err := user.Current()
-		if err != nil {
-			fmt.Println("Error")
-		}
-		homedir := usr.HomeDir
-		fmt.Println(homedir)
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Println("Error")
 	}
+	homedir := usr.HomeDir
+	fmt.Println(homedir)
 }
 
 func goroutine() {
@@ -232,64 +248,6 @@ func UnmarshalArrays(input []byte) [][]byte {
 	return arrs
 }
 
-func TestExporting() {
-
-	dog := animals.Dog{BarkStrength: 10}
-	dog.Age = 1
-}
-
-type A struct {
-	Id int
-}
-
-type B struct {
-	A
-}
-
-type C struct {
-	B
-}
-
-func PrintNumber(n5 int, n3 int) {
-
-	for i := 0; i < n5; i++ {
-		fmt.Print("5")
-	}
-	for i := 0; i < n3; i++ {
-		fmt.Print("3")
-	}
-
-	fmt.Print(n5, n3, "\n")
-}
-
 func main() {
-
-	var T int
-	fmt.Scanf("%v", &T)
-
-	for i := 0; i < T; i++ {
-		var N int
-		fmt.Scanf("%v", &N)
-
-		if N%3 == 0 {
-			PrintNumber(N, 0)
-		} else if N/3 > 0 {
-			done := false
-			for j := N / 3; j > 0 && done == false; j-- {
-				if (N-j*3)%5 == 0 {
-					PrintNumber(j*3, N-j*3)
-					done = true
-				}
-			}
-			if done == false {
-				if N%5 == 0 {
-					PrintNumber(0, N)
-				} else {
-					fmt.Println(-1)
-				}
-			}
-		} else {
-			fmt.Println(-1)
-		}
-	}
+	checkOS()
 }
