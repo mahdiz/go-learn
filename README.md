@@ -171,3 +171,31 @@ type duck struct {
 	featherCount int
 }
 ```
+
+Go does not support [type inheritance](https://golang.org/doc/faq#inheritance). So, something like this won't compile:
+ 
+```go
+var a animal
+d := duck{}
+a = d		// COMPILE ERROR: cannot use d (type duck) as type animal in assignment 
+```
+
+Instead, we can use `interface`:
+
+```go
+type bird interface {
+	Fly() string
+}
+
+func (d *duck) Fly() {
+	return "Duck flying..."
+}
+```
+
+Now, we can write:
+
+```go
+var b bird
+d := duck{}
+b = d
+```

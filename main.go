@@ -248,6 +248,18 @@ func UnmarshalArrays(input []byte) [][]byte {
 	return arrs
 }
 
+type animal struct {
+}
+
+type duck struct {
+	animal
+	featherCount int
+}
+
 func main() {
-	checkOS()
+	var a animal
+	d := duck{}
+	a = d
+
+	fmt.Println(a)
 }
