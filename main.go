@@ -257,9 +257,5 @@ type duck struct {
 }
 
 func main() {
-	var a animal
-	d := duck{}
-	a = d
 
-	fmt.Println(a)
 }

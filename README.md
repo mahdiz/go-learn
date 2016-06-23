@@ -141,7 +141,9 @@ A "go" statement starts the execution of a function call as an independent concu
 ```
 
 ## Object-Oriented
-A struct is a collection of fields: 
+Go does not support all object-oriented mechanisms common in Java and C#, and it is for a reason: keeping objects lightweight. Go does not support type inheritance, and its subclassing and polymorphism is limited.
+
+A `struct` is a collection of fields: 
 
 ```go
 type Vertex struct {
@@ -180,7 +182,7 @@ d := duck{}
 a = d		// COMPILE ERROR: cannot use d (type duck) as type animal in assignment 
 ```
 
-Instead, we can use `interface`:
+Instead, we can use interfaces. They are satisfied implicitly, unlike Java or C#, so interfaces can be defined for code we don’t own.
 
 ```go
 type bird interface {
@@ -198,4 +200,52 @@ Now, we can write:
 var b bird
 d := duck{}
 b = d
+```
+
+### Polymorphism
+Polymorphism in Go is limited and can only be achieved through interfaces. Method `Run()` in the following code has polymorphic behavior:
+
+```go
+type ClientProtocol struct {
+	Id int
+}
+
+type ServerProtocol struct {
+	IsUp bool
+}
+
+type Protocol interface {
+	Run() error
+}
+
+func (p ClientProtocol) Run() error {
+	fmt.Println("I'm a client.")
+	return nil
+}
+
+func (p ServerProtocol) Run() error {
+	fmt.Println("I'm a server.")
+	return nil
+}
+
+func main() {
+	client := ClientProtocol{Id: 76}
+	server := ServerProtocol{}
+
+	protocols := [2]Protocol{client, server}
+	protocols[0].Run()
+	protocols[1].Run()
+}
+```
+
+### Type Assertion
+Type assertions are similar to dynamic type casting in Java and C#. The notation `x.(T)` is called type assertion. In the Protocol example above, we can write:
+
+```go
+	cp, ok := protocols[0].(ClientProtocol)		// Type assertion
+	if ok {
+		fmt.Println(cp.Id)
+	} else {
+		fmt.Println("Not a client protocol!")
+	}
 ```
