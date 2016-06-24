@@ -162,6 +162,20 @@ v := Vertex{x: 56}	// to create and set specific fields
 fmt.Println(v.x)		// to access fields of a struct
 ```
 
+The (v *Vertex) is called a _method receiver_. If the method receiver is not defined as a pointer, then the object will be copied by value, i.e., changes to the object will not remain after the method returns. For example, the following code will print `{1,2}` while it would print `{4,6}` if we had `func (v *Vertex)`:
+
+```go
+func (v Vertex) addVertex(v2 Vertex) {
+	v.x += v2.x;
+	v.y += v2.y;
+}
+
+v1 := Vertex{x: 1, y: 2}
+v2 := Vertex{x: 3, y: 4}
+v1.addVertex(v2)
+fmt.Println(v1)
+```
+
 Inheritance is done using embedding which is to embed a `struct` name inside another `struct`:
 
 ```go
@@ -203,7 +217,7 @@ b = d
 ```
 
 ### Polymorphism
-Polymorphism in Go is limited and can only be achieved through interfaces. Method `Run()` in the following code has polymorphic behavior:
+Polymorphism in Go is limited and can only be achieved through interfaces. Method `Run()` in the following code has a polymorphic behavior:
 
 ```go
 type ClientProtocol struct {
@@ -242,10 +256,10 @@ func main() {
 Type assertions are similar to dynamic type casting in Java and C#. The notation `x.(T)` is called type assertion. In the Protocol example above, we can write:
 
 ```go
-	cp, ok := protocols[0].(ClientProtocol)		// Type assertion
-	if ok {
-		fmt.Println(cp.Id)
-	} else {
-		fmt.Println("Not a client protocol!")
-	}
+cp, ok := protocols[0].(ClientProtocol)		// Type assertion
+if ok {
+	fmt.Println(cp.Id)
+} else {
+	fmt.Println("Not a client protocol!")
+}
 ```

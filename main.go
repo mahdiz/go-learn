@@ -109,6 +109,11 @@ func mapExample() {
 		fmt.Println(val)
 	}
 
+	// iterate over map keys
+	for k, _ := range myMap {
+		fmt.Println(k)
+	}
+
 	// to delete a pair from the map
 	delete(myMap, "b")
 }
