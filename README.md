@@ -160,6 +160,38 @@ x := <-channel
 fmt.Println("Goroutine finished!")
 ```
 
+### Select
+`select` allows waiting on multiple channels:
+
+```go
+c1 := make(chan int)
+c2 := make(chan int)
+
+go func() {
+	delay := rand.Intn(5)
+	time.Sleep(time.Duration(delay) * time.Second)
+	c1 <- delay
+}()
+
+go func() {
+	delay := rand.Intn(5)
+	time.Sleep(time.Duration(delay) * time.Second)
+	c2 <- delay
+}()
+
+fmt.Println("Goroutines started...")
+
+// Wait until something is written on the channel
+for i := 0; i < 2; i++ {
+	select {
+	case delay := <-c1:
+		fmt.Println("First goroutine finished after " + strconv.Itoa(delay) + " sec.")
+	case delay := <-c2:
+		fmt.Println("Second goroutine finished after " + strconv.Itoa(delay) + " sec.")
+	}
+}
+```
+
 ## Object-Oriented
 Go does not support all object-oriented mechanisms common in Java and C#, and it is for a reason: keeping objects lightweight. Go does not support type inheritance, and its subclassing and polymorphism is limited.
 

@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -27,7 +29,8 @@ func Channels() {
 	fmt.Println(x)
 }
 
-func Concurrency() {
+// Single goroutine
+func Concurrency1() {
 	channel := make(chan bool)
 
 	go func() {
@@ -45,6 +48,36 @@ func Concurrency() {
 	fmt.Println("Goroutine finished!")
 }
 
+// Multiple goroutine
+func Concurrency2() {
+	c1 := make(chan int)
+	c2 := make(chan int)
+
+	go func() {
+		delay := rand.Intn(5)
+		time.Sleep(time.Duration(delay) * time.Second)
+		c1 <- delay
+	}()
+
+	go func() {
+		delay := rand.Intn(5)
+		time.Sleep(time.Duration(delay) * time.Second)
+		c2 <- delay
+	}()
+
+	fmt.Println("Goroutines started...")
+
+	// Wait until something is written on the channel
+	for i := 0; i < 2; i++ {
+		select {
+		case delay := <-c1:
+			fmt.Println("First goroutine finished after " + strconv.Itoa(delay) + " sec.")
+		case delay := <-c2:
+			fmt.Println("Second goroutine finished after " + strconv.Itoa(delay) + " sec.")
+		}
+	}
+}
+
 func main() {
-	Concurrency()
+	Concurrency2()
 }
