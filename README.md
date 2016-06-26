@@ -128,16 +128,36 @@ var i = len(a)			// to get array length
 A "go" statement starts the execution of a function call as an independent concurrent thread of control, or goroutine, within the same address space:
 
 ```go
-  // nameless goroutine
-  go func(x, y) {
-      panic("Signal: ")
-    }()
+// nameless goroutine
+go func(x, y) {
+	panic("Signal: ")
+}()
 
-  // named goroutine
-  func findSum(x int, y int) {
-     ...
-  }   
-  go findSum(x, y)
+// named goroutine
+func findSum(x int, y int) {
+	...
+} 
+
+go findSum(x, y)
+```
+
+### Channels
+Channels are the pipes that connect concurrent goroutines. You can send values into channels from one goroutine and receive those values into another goroutine.
+
+```go
+channel := make(chan bool)
+
+go func() {
+	time.Sleep(2 * time.Second)
+	channel <- 'ping'
+}()
+
+fmt.Println("Goroutine started...")
+
+// Wait until something is written on the channel
+x := <-channel
+
+fmt.Println("Goroutine finished!")
 ```
 
 ## Object-Oriented

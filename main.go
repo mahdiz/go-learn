@@ -127,7 +127,6 @@ func funcHandler() {
 			fmt.Println(sig)
 		}
 	}
-
 	h([]string{"a", "b", "c"})
 }
 
@@ -139,36 +138,6 @@ func checkOS() {
 	}
 	homedir := usr.HomeDir
 	fmt.Println(homedir)
-}
-
-func goroutine() {
-
-	go func() {
-		panic("Signal: ")
-	}()
-}
-
-func channels() {
-
-	a := []int{1, 2, 3, 4, 5, 6}
-
-	// create a channel of integers
-	channel := make(chan int)
-
-	// create a goroutine to find sum and write the result to the channel
-	go func(arr []int, c chan int) {
-		s := 0
-		for _, e := range arr {
-			s += e
-			time.Sleep(500 * time.Millisecond)
-		}
-		// write the sum to the channel
-		c <- s
-	}(a, channel)
-
-	// read from the channel (will wait until something is written on the channel)
-	x := <-channel
-	fmt.Println(x)
 }
 
 // waits for two channels and proceeds based on which channel has something to read
