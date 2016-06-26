@@ -145,11 +145,11 @@ go findSum(x, y)
 Channels are the pipes that connect concurrent goroutines. You can send values into channels from one goroutine and receive those values into another goroutine.
 
 ```go
-channel := make(chan bool)
+channel := make(chan string)
 
 go func() {
 	time.Sleep(2 * time.Second)
-	channel <- 'ping'
+	channel <- "ping"
 }()
 
 fmt.Println("Goroutine started...")
