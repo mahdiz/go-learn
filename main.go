@@ -17,11 +17,11 @@ import (
 
 func basics() {
 
-	// Reading an integer from stdin:
+	// Reading an integer from stdin
 	var x int
 	fmt.Scanf("%v\n", &x)
 
-	// Reading an integer and a char right after it:
+	// Reading an integer and a char right after it
 	var c byte
 	fmt.Scanf("%v%c\n", &x, &c)
 	fmt.Println(string(c))
@@ -231,5 +231,5 @@ type duck struct {
 }
 
 func main() {
-
+	timer()
 }
