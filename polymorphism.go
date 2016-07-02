@@ -14,8 +14,6 @@ type Protocol interface {
 	Run() error
 }
 
-type Anything interface{}
-
 func (p *ClientProtocol) Run() error {
 	fmt.Println("I'm a client.")
 	return nil
@@ -41,8 +39,10 @@ func main() {
 		fmt.Println("Not a client protocol!")
 	}
 
-	anything := [2]Anything{&client, &server}
-	ca, ok := anything[0].(*ClientProtocol) // Type assertion
+	var anything [2]interface{}
+	anything[0] = client
+	anything[1] = server
+	ca, ok := anything[0].(ClientProtocol) // Type assertion
 	if ok {
 		fmt.Println(ca.Id)
 	} else {
