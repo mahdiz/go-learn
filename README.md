@@ -1,3 +1,27 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Learning Go](#learning-go)
+  - [General](#general)
+  - [Loops](#loops)
+  - [Switch](#switch)
+  - [Basic Types](#basic-types)
+  - [
+
+## Poi](#-poi)
+  - [ p *in](#p-in)
+  - [mes := []in](#mes--in)
+    - [go findS](#go-finds)
+    - [ait un](#ait-un)
+  - [se delay := <-c](#se-delay---c)
+    - [go
+var b bir](#go%0Avar-b-bir)
+    - [otocols := [2]](#otocols--2)
+  - [ fmt.Print](#fmtprint)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Learning Go
 
 ## General
@@ -316,22 +340,52 @@ if ok {
 }
 ```
 
-This is especially useful when no common interface method applies to the sub types. In that case, we can use an empty interface that essentially applies
+This is especially useful when no common interface method applies to the sub types. In that case, we can use an empty interface (i.e., `interface{}`) that essentially applies
 to all types. For example, in the above `Protocol` example, we can write:
 
 ```go
-type Anything interface {}
+var anything [2]interface{}
+anything[0] = client
+anything[1] = server
+cp, ok := anything[0].(ClientProtocol) 	// Type assertion
+if ok {
+    fmt.Println(cp.Id)
+} else {
+    fmt.Println("Not a client protocol!")
+}
+```
+
+While the use of `interface{}` type can be considered as a deviation from the strongly-typed nature of Go, type assertions
+allow safe type checking at runtime.
+
+## Reflection
+Using reflection, a program can inspect its own structure (e.g., types and functions). In Go, the `reflect` package
+allows reflecting program structure, for example:
+
+```go
+var x int = 65
+fmt.Println("type:", reflect.TypeOf(x))
+```
+
+will print `type: int`. To enumerate the fields of a struct type, we can write:
+
+```go
+type Person struct {
+	Age int
+	Name string
+	Height float64
+}
 
 func main() {
-    client := ClientProtocol{Id: 76}
-    server := ServerProtocol{}
+	var x int = 56
+	fmt.Println("type:", reflect.TypeOf(x))
 
-	anything := [2]Anything{&client, &server}
-	cp, ok := anything[0].(*ClientProtocol)     // Type assertion
-	if ok {
-		fmt.Println(cp.Id)
-	} else {
-		fmt.Println("Not a client protocol!")
+	t := Person{26, "Mahdi", 5.7}
+	s := reflect.ValueOf(&t).Elem()
+	typeOfT := s.Type()
+	for i := 0; i < s.NumField(); i++ {
+		f := s.Field(i)
+		fmt.Printf("%s %s = %v\n", typeOfT.Field(i).Name, f.Type(), f.Interface())
 	}
 }
 ```
