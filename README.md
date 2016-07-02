@@ -304,6 +304,26 @@ func main() {
 }
 ```
 
+If no common interface method applies to the sub types, we can use an empty interface that essentially applies
+to all types. For example, in the above Protocol example, we can write:
+
+```go
+type Anything interface {}
+
+func main() {
+	client := ClientProtocol{Id: 76}
+	server := ServerProtocol{}
+
+	anything := [2]Anything{&client, &server}
+	ca, ok := anything[0].(*ClientProtocol)     // Type assertion
+	if ok {
+		fmt.Println(ca.Id)
+	} else {
+		fmt.Println("Not a client protocol!")
+	}
+}
+```
+
 ### Type Assertion
 Type assertions are similar to dynamic type casting in Java and C#. The notation `x.(T)` is called type assertion. In the Protocol example above, we can write:
 
