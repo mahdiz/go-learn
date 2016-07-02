@@ -284,12 +284,12 @@ type Protocol interface {
 	Run() error
 }
 
-func (p ClientProtocol) Run() error {
+func (p *ClientProtocol) Run() error {
 	fmt.Println("I'm a client.")
 	return nil
 }
 
-func (p ServerProtocol) Run() error {
+func (p *ServerProtocol) Run() error {
 	fmt.Println("I'm a server.")
 	return nil
 }
@@ -298,29 +298,9 @@ func main() {
 	client := ClientProtocol{Id: 76}
 	server := ServerProtocol{}
 
-	protocols := [2]Protocol{client, server}
+	protocols := [2]Protocol{&client, &server}
 	protocols[0].Run()
 	protocols[1].Run()
-}
-```
-
-If no common interface method applies to the sub types, we can use an empty interface that essentially applies
-to all types. For example, in the above Protocol example, we can write:
-
-```go
-type Anything interface {}
-
-func main() {
-	client := ClientProtocol{Id: 76}
-	server := ServerProtocol{}
-
-	anything := [2]Anything{&client, &server}
-	ca, ok := anything[0].(*ClientProtocol)     // Type assertion
-	if ok {
-		fmt.Println(ca.Id)
-	} else {
-		fmt.Println("Not a client protocol!")
-	}
 }
 ```
 
@@ -328,10 +308,30 @@ func main() {
 Type assertions are similar to dynamic type casting in Java and C#. The notation `x.(T)` is called type assertion. In the Protocol example above, we can write:
 
 ```go
-cp, ok := protocols[0].(ClientProtocol)		// Type assertion
+cp, ok := protocols[0].(*ClientProtocol)		// Type assertion
 if ok {
 	fmt.Println(cp.Id)
 } else {
 	fmt.Println("Not a client protocol!")
+}
+```
+
+This is especially useful when no common interface method applies to the sub types. In that case, we can use an empty interface that essentially applies
+to all types. For example, in the above `Protocol` example, we can write:
+
+```go
+type Anything interface {}
+
+func main() {
+    client := ClientProtocol{Id: 76}
+    server := ServerProtocol{}
+
+	anything := [2]Anything{&client, &server}
+	cp, ok := anything[0].(*ClientProtocol)     // Type assertion
+	if ok {
+		fmt.Println(cp.Id)
+	} else {
+		fmt.Println("Not a client protocol!")
+	}
 }
 ```
