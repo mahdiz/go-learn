@@ -1,28 +1,22 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+# Learning Go
 
-- [Learning Go](#learning-go)
+This library gives a quick overview of Go for programmers already familiar with C/C++.
+
+**Table of Contents**
   - [General](#general)
   - [Loops](#loops)
   - [Switch](#switch)
   - [Basic Types](#basic-types)
-  - [
+    - [Pointers](#pointers)
+    - [Arrays](#arrays)
+  - [Concurrency](#concurrency)
+    - [Channels](#channels)
+    - [Select](#select)
+  - [Object-Oriented](#object-oriented)
+    - [Polymorphism](#polymorphism)
+    - [Type Assertion](#type-assertion)
+  - [Reflection](#reflection)
 
-## Poi](#-poi)
-  - [ p *in](#p-in)
-  - [mes := []in](#mes--in)
-    - [go findS](#go-finds)
-    - [ait un](#ait-un)
-  - [se delay := <-c](#se-delay---c)
-    - [go
-var b bir](#go%0Avar-b-bir)
-    - [otocols := [2]](#otocols--2)
-  - [ fmt.Print](#fmtprint)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# Learning Go
 
 ## General
 Composite types are array, struct, pointer, function, interface, slice, map, and channel types—may be constructed using type literals.
@@ -131,7 +125,7 @@ const Pi = 3.14
 ```
 
 ## Pointers
-Go has pointers similar to the behaviors of * and & in C. Unlike C, Go has no pointer arithmetic. 
+Go has pointers similar to the behaviors of `*` and `&` in C. Unlike C, Go has no pointer arithmetic. 
 
 ```go
 var i = 56
