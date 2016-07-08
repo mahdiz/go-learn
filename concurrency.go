@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"net"
 	"strconv"
 	"time"
 )
@@ -67,8 +68,8 @@ func Concurrency2() {
 
 	fmt.Println("Goroutines started...")
 
-	// Wait until something is written on the channel
-	for i := 0; i < 2; i++ {
+	// Wait until something is written on both channels
+	for i := 0; i < 1; i++ {
 		select {
 		case delay := <-c1:
 			fmt.Println("First goroutine finished after " + strconv.Itoa(delay) + " sec.")
@@ -76,8 +77,33 @@ func Concurrency2() {
 			fmt.Println("Second goroutine finished after " + strconv.Itoa(delay) + " sec.")
 		}
 	}
+	fmt.Println("We're done.")
+}
+
+func Concurrency3() {
+	ch := make(chan int)
+	go func() {
+		for {
+			fmt.Println("Writing sth on the channel")
+			ch <- 56
+			time.Sleep(1000 * time.Millisecond)
+		}
+	}()
+
+	for {
+		select {
+		case newCh := <-ch:
+			fmt.Println(newCh)
+		}
+	}
 }
 
 func main() {
-	Concurrency2()
+	//Concurrency3()
+
+	s := "192.168.0.1:9572"
+
+	//u := url.Parse(s)
+	host, port, _ := net.SplitHostPort(s)
+	fmt.Println(host, port)
 }

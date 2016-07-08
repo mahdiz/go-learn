@@ -2,16 +2,22 @@ package main
 
 import "fmt"
 
-type ClientProtocol struct {
+type IProtocol interface {
+	Run() error
+}
+
+type Protocol struct {
 	Id int
 }
 
-type ServerProtocol struct {
-	IsUp bool
+type ClientProtocol struct {
+	Protocol
+	Username string
 }
 
-type Protocol interface {
-	Run() error
+type ServerProtocol struct {
+	Protocol
+	IsUp bool
 }
 
 func (p *ClientProtocol) Run() error {
@@ -25,15 +31,16 @@ func (p *ServerProtocol) Run() error {
 }
 
 func main() {
-	client := ClientProtocol{Id: 76}
+	client := ClientProtocol{Username: "mahdiz", Protocol: Protocol{Id: 76}}
 	server := ServerProtocol{}
 
-	protocols := [2]Protocol{&client, &server}
+	protocols := [2]IProtocol{&client, &server}
 	protocols[0].Run()
 	protocols[1].Run()
 
 	cp, ok := protocols[0].(*ClientProtocol) // Type assertion
 	if ok {
+		fmt.Println(cp.Username)
 		fmt.Println(cp.Id)
 	} else {
 		fmt.Println("Not a client protocol!")
@@ -44,6 +51,7 @@ func main() {
 	anything[1] = server
 	ca, ok := anything[0].(ClientProtocol) // Type assertion
 	if ok {
+		fmt.Println(ca.Username)
 		fmt.Println(ca.Id)
 	} else {
 		fmt.Println("Not a client protocol!")

@@ -71,6 +71,12 @@ func arrayExample() {
 	arr1 = arr2
 	arr2[2] = 23
 	fmt.Println(arr1, arr2)
+
+	// Deleting the i-th element of an array
+	i := 4
+	a := [...]int{0, 1, 2, 3, 4, 5, 6}
+	b := append(a[:i], a[i+1:]...)
+	fmt.Println(b)
 }
 
 func sliceExample() {
@@ -116,6 +122,7 @@ func mapExample() {
 
 	// to delete a pair from the map
 	delete(myMap, "b")
+	delete(myMap, "c") // No errors if the item does not exist
 }
 
 func funcHandler() {
@@ -231,5 +238,5 @@ type duck struct {
 }
 
 func main() {
-	timer()
+	mapExample()
 }
