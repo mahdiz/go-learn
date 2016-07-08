@@ -21,18 +21,18 @@ type ServerProtocol struct {
 }
 
 func (p *ClientProtocol) Run() error {
-	fmt.Println("I'm a client.")
+	fmt.Println("I'm a client with id =", p.Id)
 	return nil
 }
 
 func (p *ServerProtocol) Run() error {
-	fmt.Println("I'm a server.")
+	fmt.Println("I'm a server with id =", p.Id)
 	return nil
 }
 
 func main() {
 	client := ClientProtocol{Username: "mahdiz", Protocol: Protocol{Id: 76}}
-	server := ServerProtocol{}
+	server := ServerProtocol{IsUp: true, Protocol: Protocol{Id: 248}}
 
 	protocols := [2]IProtocol{&client, &server}
 	protocols[0].Run()
