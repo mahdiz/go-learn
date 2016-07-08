@@ -2,7 +2,13 @@ package main
 
 import "fmt"
 
+const (
+	PROTOCOL_TYPE_CLIENT = iota
+	PROTOCOL_TYPE_SERVER
+)
+
 type IProtocol interface {
+	Type() int
 	Run() error
 }
 
@@ -20,9 +26,17 @@ type ServerProtocol struct {
 	IsUp bool
 }
 
+func (p *ClientProtocol) Type() int {
+	return PROTOCOL_TYPE_CLIENT
+}
+
 func (p *ClientProtocol) Run() error {
 	fmt.Println("I'm a client with id =", p.Id)
 	return nil
+}
+
+func (p *ServerProtocol) Type() int {
+	return PROTOCOL_TYPE_SERVER
 }
 
 func (p *ServerProtocol) Run() error {
@@ -38,12 +52,18 @@ func main() {
 	protocols[0].Run()
 	protocols[1].Run()
 
-	cp, ok := protocols[0].(*ClientProtocol) // Type assertion
-	if ok {
-		fmt.Println(cp.Username)
-		fmt.Println(cp.Id)
-	} else {
-		fmt.Println("Not a client protocol!")
+	for _, p := range protocols {
+		switch p.Type() {
+		case PROTOCOL_TYPE_CLIENT:
+			cp, _ := p.(*ClientProtocol) // Type assertion
+			fmt.Println("Client username:", cp.Username)
+			fmt.Println("Client id:", cp.Id)
+
+		case PROTOCOL_TYPE_SERVER:
+			sp, _ := p.(*ServerProtocol) // Type assertion
+			fmt.Println("Server is up?", sp.IsUp)
+			fmt.Println("Server id:", sp.Id)
+		}
 	}
 
 	var anything [2]interface{}
