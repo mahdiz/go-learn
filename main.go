@@ -51,15 +51,12 @@ func basics() {
 	// Random number generation
 	x = rand.Intn(1000) // A random number between [0,1000)
 	fmt.Println()
-}
 
-func mathExample() {
-
-	x := 7
-	y := 3
-	z := math.Ceil(float64(x) / float64(y))
-
-	fmt.Println(z)
+	// Some math
+	u := 7
+	v := 3
+	w := math.Ceil(float64(u) / float64(v))
+	fmt.Println(w)
 }
 
 func arrayExample() {
@@ -238,5 +235,5 @@ type duck struct {
 }
 
 func main() {
-	mapExample()
+	arrayExample()
 }
